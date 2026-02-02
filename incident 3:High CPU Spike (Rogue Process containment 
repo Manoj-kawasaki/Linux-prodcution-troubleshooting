@@ -1,0 +1,107 @@
+#Category: Performance | Process - Management | System Stability
+- Environment Ubuntu / WSL / EC2
+
+#Objective
+
+- Simulate a real-world performance incident where CPU and memory usage spike due to a runaway process, identify the root cause, safely contain the process without disrupting critical services, and verify full system recovery using production-style validation techniques.
+
+# Impact (Production Context)
+
+- High CPU usage can cause application slowdowns, request timeouts, and degraded user experience.
+- Memory pressure can lead to OOM (Out Of Memory) kills, crashing critical services like databases or web servers.
+- Prolonged load can destabilize the entire system and trigger automated scaling or failover events in cloud environment
+
+- Step 1: Simulate the Failure
+Create a rogue process that consumes CPU continuously
+
+- yes > /dev/null &
+
+-Run it twice to simulate multiple runaway processes
+
+#Expected Result
+- CPU usage increases rapidly, simulating a broken script or infinite loop in a production workload.
+
+- Step 2: Detect the Problem
+Monitor system performance:
+
+- top
+
+- Observations
+
+- CPU usage spikes above 80–100%
+A process named yes appears at the top of the list
+Note the PID (Process ID) of the high-CPU process
+- This step identifies the symptom and suspect process.
+
+- Step 3: Investigate Before Acting
+-Inspect the process to confirm it is safe to terminate:
+
+- ps -fp <PID>
+
+-Information Collected
+
+- User who started the process
+Command and execution path
+- Process start time
+- Parent process
+Purpose
+-This prevents accidentally killing:
+- System services
+- SSH sessions
+- Databases
+- Production web servers
+
+# Root Cause Analysis
+- The performance issue was caused by runaway user-space processes executing in an infinite loop, continuously consuming CPU without performing useful work. 
+- This simulates a misbehaving application or faulty automation script in production.
+
+- Step 4: Contain the Issue Safely
+-Graceful Termination 
+
+sudo kill -15 <PID>
+
+- This sends SIGTERM, allowing the process to:
+- Close files
+- Flush logs
+- Release memory cleanly
+-Force Termination (Last Resort)
+
+- sudo kill -9 <PID>
+
+- Used only if the process does not respond to SIGTERM.
+
+- Step 5: Verify Recovery
+-Check system health:
+-top
+- free -h
+- uptime
+
+-Expected Result
+-CPU usage returns to normal levels
+-Memory pressure stabilizes
+Load average begins to decrease
+
+# Key Learnings
+
+- top → Real-time system - performance monitoring
+- ps -fp → Process ownership and execution context
+- kill -15 → Safe, graceful process termination
+- kill -9 → Forceful termination (last resort)
+- free -h → Memory usage validation
+- uptime → System load trend analysis
+
+# Prevention & Best Practices
+
+- Use ulimit to restrict CPU and memory usage per user or process
+- Apply systemd CPU and memory quotas for critical services
+Set up monitoring and alerts (CPU > 80% for 2 minutes)
+- Review automation scripts for infinite loops or uncontrolled process spawning
+
+#Professional Summary
+
+- This incident demonstrates my ability to:
+- Diagnose system performance degradation using real-time monitoring tools..
+- Investigate processes before taking corrective action
+Apply safe remediation strategies to avoid service disruption
+- Validate recovery using system-level health checks
+Think in terms of system reliability and business impact, not just command execution
