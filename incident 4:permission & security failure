@@ -1,0 +1,73 @@
+ Permission & Security Failure
+# objective
+- Simulate a real-world Linux permission failure where an application cannot access its own log file. Investigate the issue using Linux ownership and permission concepts and resolve it using a safe, production-style troubleshooting approach.
+- This incident focuses on:
+- File ownership
+- User permissions
+- Secure access validation
+- Minimal-risk remediation
+# Environment Setup
+- A test application directory and log file were created
+- sudo mkdir -p /opt/app/data
+- sudo touch /opt/app/data/app.log
+- Checking file ownership:
+ls -l /opt/app/data/app.log
+- Example output:
+-rw------- 1 root root app.log
+The file is owned by root, simulating a scenario where the application user cannot access its own log.
+
+# Problem Simulation
+- Attempting to write to the file as the application user:
+- sudo -u appuser echo "Test log" >> /opt/app/data/app.log
+- Output:
+Permission denied
+This confirms the application user lacks sufficient permissions.
+
+# Investigation
+- We inspected file ownership and permissions:
+- ls -l /opt/app/data/
+- Findings:
+- File owned by root
+- Application runs as appuser
+- appuser has no read/write access
+
+# Root Cause
+- The log file was created by root with restrictive permissions. The application runs under a separate service account (appuser), causing a permission mismatch.
+# Resolution
+- We corrected ownership to match the application runtime user:
+- sudo chown appuser:appuser /opt/app/data/app.log
+- This ensures the application user has proper access while maintaining secure ownership.
+- We then verified access:
+- sudo -u appuser cat /opt/app/data/app.log
+- The file was successfully accessed.
+# Verification
+- Final validation steps:
+- ls -l /opt/app/data/app.log
+- sudo -u appuser cat /opt/app/data/app.log
+No permission errors occurred, confirming the issue is resolved.
+
+# Key Learnings
+- Linux file access depends on ownership and permissions
+- Applications run under dedicated service accounts
+- Ownership mismatches cause real production failures
+- Use sudo -u to simulate application behavior
+- Always investigate before changing permissions
+
+# Security Note
+In production environments, permissions should follow the principle of least privilege. Ownership should match the application user without granting unnecessary access.
+
+# Professional Summary
+- This incident demonstrates the ability to:
+Diagnose permission-related failures in Linux
+- Identify ownership mismatches
+- Apply minimal and safe remediation and
+Validate fixes using real application users
+- Document incidents clearly for knowledge sharing
+
+# Skills Practiced
+- Linux file permissions
+- User and ownership management
+- Secure troubleshooting methodology
+- Application-level validation
+
+#✅ Incident 4 successfully completed and documented
