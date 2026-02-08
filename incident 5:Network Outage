@@ -1,0 +1,113 @@
+# Linux Troubleshooting Lab — Incident 5: Network Outage
+
+## 🎯 Objective
+
+Simulate and resolve a real-world Linux network outage where an application becomes unreachable due to blocked ports or DNS issues. This incident focuses on structured network troubleshooting using industry-standard tools.
+
+
+## 🛠 Scenario
+
+A local web service was running but became inaccessible from the system. The goal was to diagnose whether the issue was caused by:
+
+- Blocked ports
+- Firewall rules
+- Service listening failures
+- DNS or routing problems
+
+
+## 🔍 Investigation Steps
+
+### 1. Verify Service Status
+
+Check if the service is running and listening:
+
+
+- ss -tuln
+
+
+Confirmed whether the application was bound to port 8080.
+
+
+## 2. Test Connectivity
+
+Attempt connection to the service:
+
+
+curl http://localhost:8080
+
+This validated whether the application responded correctly.
+
+
+### 3. Check Firewall Rules
+
+Inspect firewall status:
+
+
+sudo ufw status
+
+Detected blocked or restricted ports.
+
+
+### 4. Trace Network Path
+
+Diagnose routing issues:
+
+bash
+traceroute localhost
+
+Verified packet flow and network reachability.
+
+
+## ✅ Resolution
+
+Allowed traffic through the firewall:
+
+
+sudo ufw allow 8080
+
+
+Re-tested connectivity:
+
+
+curl http://localhost:8080
+
+
+The service responded successfully.
+
+
+
+# Verification
+
+- Confirmed port accessibility
+- Verified firewall rules
+- Validated successful HTTP response
+
+
+# 📘 Key Learnings
+
+- Use `ss` to confirm open ports
+- Use `curl` to test application response
+- Use `ufw` to manage firewall access
+- Use `traceroute` to debug routing issues
+- Always verify fixes after remediation
+
+
+# 🏆 Professional Summary
+
+This incident demonstrates the ability to:
+
+- Diagnose network outages methodically
+- Identify blocked ports and firewall issues
+- Apply safe remediation steps
+- Validate system recovery using real tests
+
+
+## 📌 Skills Practiced
+
+- Linux networking fundamentals
+- Firewall troubleshooting
+- Service connectivity testing
+- Structured incident response
+
+-
+✅ **Incident 5 successfully completed 
