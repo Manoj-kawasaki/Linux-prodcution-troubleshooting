@@ -1,0 +1,158 @@
+Incident 5: Log Explosion — Linux Troubleshooting Lab
+
+# Overview
+
+- This lab simulates a log explosion incident where application logs grow uncontrollably and consume disk space. The goal is to detect the issue, analyze log patterns, safely clean up the system, and implement preventive measures using production-style Linux troubleshooting techniques.
+
+-This scenario mirrors real-world DevOps/SRE incidents where runaway logging can degrade system performance or cause outages.
+
+---
+
+₹ Objective
+
+- Simulate rapid log growth
+- Detect abnormal disk usage
+- Analyze repeated error patterns
+- Safely clean oversized logs
+- Prevent future log explosions using log rotation
+
+---
+
+# Environment Setup
+
+Create a test log file:
+
+touch /mnt/wsl/app.log
+
+---
+
+- Step 1: Simulate Log Explosion
+
+Generate a large number of error messages:
+
+for i in {1..100000}; do echo "ERROR: Disk issue" >> /mnt/wsl/app.log; done
+
+This simulates an application repeatedly writing error logs.
+
+---
+
+- Step 2: Detect Disk Usage
+
+Check file size:
+
+du -sh /mnt/wsl/app.log
+
+This shows how much disk space the log is consuming.
+
+---
+
+- Step3 : Analyze Log Content
+
+- Count error occurrences
+
+grep "ERROR" /mnt/wsl/app.log | wc -l
+
+- Counts how many error messages exist.
+
+- Find most frequent log entries
+
+sort /mnt/wsl/app.log | uniq -c | sort -nr | head
+
+- This pipeline:
+
+- Sorts log lines
+- Counts repeated entries
+- Displays the most frequent messages
+
+Helps identify spam or recurring failures.
+
+---
+
+- Step 4: Safe Cleanup
+
+Empty the log file without deleting it:
+
+truncate -s 0 /mnt/wsl/app.log
+
+This preserves file ownership and avoids breaking running applications.
+
+Verify cleanup:
+
+du -sh /mnt/wsl/app.log
+
+---
+
+- Step 5: Prevent Future Log Explosion
+
+Configure log rotation:
+
+sudo nano /etc/logrotate.d/app
+
+Add:
+
+/mnt/wsl/app.log {
+    daily
+    rotate 7
+    compress
+    missingok
+    notifempty
+}
+
+Explanation
+
+- daily → rotate logs every day
+- rotate 7 → keep 7 old logs
+- compress → save disk space
+- missingok → ignore missing file
+- notifempty → skip empty logs
+
+Test configuration:
+
+sudo logrotate -f /etc/logrotate.d/app
+
+---
+
+# Verification
+
+- Log file size reduced
+- System disk space restored
+- Log rotation configured
+- Future explosions prevented
+
+---
+
+# Key Learnings
+
+- Detect abnormal disk usage with "du"
+- Analyze logs using "grep", "sort", and "uniq"
+- Safely clean logs using "truncate"
+- Prevent incidents with "logrotate"
+- Apply structured troubleshooting workflow
+
+---
+
+# Professional Summary
+
+This incident demonstrates the ability to:
+
+- Diagnose log-related disk issues
+- Analyze recurring error patterns
+- Perform safe remediation
+- Implement preventive automation
+- Follow production-style incident response
+
+---
+
+# Skills Practiced
+
+- Linux log analysis
+- Disk troubleshooting
+- Shell pipelines
+- Log rotation management
+- Incident workflow methodology
+
+---
+
+Status
+
+✅ Incident successfully simulated, analyzed, resolved, and documented.
