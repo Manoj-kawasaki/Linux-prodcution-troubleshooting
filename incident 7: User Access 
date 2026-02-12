@@ -1,0 +1,131 @@
+Incident 7: User Access Failure — Linux Troubleshooting Lab
+
+# Overview
+
+- This lab simulates a real-world Linux incident where a developer is locked out of administrative access. The objective is to diagnose the root cause and safely restore access using proper Linux user and group management practices.
+
+- This scenario reflects common DevOps/SRE incidents involving SSH access and privilege recovery.
+
+---
+
+# Objective
+
+- Simulate developer lockout
+- Diagnose permission issues
+- Restore sudo access safely
+- Validate user authentication
+- Implement secure access practices
+
+---
+
+# Scenario
+
+A developer account exists but cannot execute administrative commands.
+
+Attempting sudo results in:
+
+devuser is not in the sudoers file
+
+This indicates missing privilege assignment.
+
+---
+
+- Step 1: Investigation
+
+Check user group membership:
+
+groups devuser
+
+Output confirms the user is not part of the sudo group.
+
+---
+
+# Root Cause
+
+The developer account lacks membership in the administrative group required for elevated privileges.
+
+Linux access control depends on:
+
+- User identity
+- Group membership
+- Permission inheritance
+
+---
+
+- Step 2: Resolution
+
+Add the user to the sudo group:
+
+sudo usermod -aG sudo devuser
+
+Verify:
+
+- groups devuser
+
+Switch user and test:
+
+- su - devuser
+sudo ls
+
+Administrative access is restored.
+
+---
+
+- Step 3: SSH Key-Based Authentication
+
+Generate SSH key:
+
+- ssh-keygen
+
+Copy to user:
+
+- ssh-copy-id devuser@localhost
+
+Test passwordless login:
+
+- ssh devuser@localhost
+
+---
+
+# Verification
+
+- User regains sudo access
+- Group membership updated
+- SSH login validated
+- Administrative functionality restored
+
+---
+
+# Key Learnings
+
+- Linux user/group access model
+- sudo privilege management
+- SSH authentication workflow
+- Secure access restoration
+- Structured incident troubleshooting
+
+---
+
+# Professional Summary
+
+This incident demonstrates the ability to:
+
+- Diagnose user permission failures
+- Restore administrative access safely
+- Validate authentication mechanisms
+- Apply production-style troubleshooting
+
+---
+
+📌 Skills Practiced
+
+- Linux user management
+- Group permission analysis
+- SSH authentication
+- Access recovery procedures
+
+---
+
+Status
+
+✅ Incident successfully simulated, diagnosed, and resolved.
