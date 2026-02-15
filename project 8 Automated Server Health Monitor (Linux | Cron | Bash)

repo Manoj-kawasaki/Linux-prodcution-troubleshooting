@@ -1,0 +1,183 @@
+# 🚀 Automated Server Health Monitor (Linux | Cron | Bash)
+
+## 📌 Project Overview
+
+In real production environments, engineers do not manually log in to servers to check CPU, memory, disk usage, or service health.
+
+Monitoring must be:
+
+- Automated
+- Continuous
+- Alert-driven
+
+This project simulates a real-world DevOps/SRE scenario by building a **Server Health Monitoring & Alerting system using Bash and Cron**.
+
+It automatically checks:
+
+- Disk usage
+- CPU usage
+- Memory usage
+- Service status
+
+and generates alerts in a log file when thresholds are crossed.
+
+---
+
+## 🎯 Objective
+
+To design a lightweight monitoring solution that:
+
+- Runs automatically
+- Detects system resource issues
+- Logs alerts with clear messages
+- Mimics real production monitoring behaviour
+
+---
+
+## 🛠 Tech Stack
+
+- Linux (Ubuntu / WSL)
+- Bash scripting
+- Cron (job scheduler)
+- System monitoring commands
+
+---
+
+## ⚙️ How It Works
+
+### 1️⃣ Script Execution
+
+The script collects system metrics using:
+
+- `df` → Disk usage
+- `top` → CPU usage
+- `free` → Memory usage
+- `systemctl` → Service health
+
+### 2️⃣ Threshold Check
+
+Each resource is compared against a predefined limit.
+
+Example:
+
+- Disk > 90%
+
+If the threshold is crossed → an alert is generated.
+
+---
+
+### 3️⃣ Alert Logging
+
+Alerts are written to:
+
+
+#health.log
+
+
+This simulates how monitoring tools send:
+
+- Logs
+- Notifications
+- Alerts
+
+in production systems.
+
+---
+
+### 4️⃣ Full Automation with Cron
+
+The script is scheduled using:
+
+crontab -e
+
+Runs automatically every minute:
+# hr min day mont weekdays
+/home/rolex/server-health-monitor/monitor.sh
+
+
+This removes manual health checks completely.
+
+---
+
+## 🧪 Alert Testing (Production-Style Validation)
+
+Instead of actually filling the disk (unsafe in real systems), alert testing was performed by:
+
+- Temporarily lowering threshold values
+- Running the script
+- Verifying alert generation in real time
+
+This follows the **same safe alert validation strategy used in production environments**.
+
+---
+
+## 📂 Project Structure 
+server-health-monitor/ │── monitor.sh │── health.log │── README.md
+
+
+---
+
+
+✔ Disk usage check  
+✔ Script execution  
+✔ Automated alert in log  
+
+These demonstrate:
+
+- Monitoring logic
+- Automation
+- Real validation
+
+---
+
+## 🧠 Key Learnings
+
+- Monitoring must be automated, not manual
+- Cron is the backbone of Linux job automation
+- Alert validation should be safe and controlled
+- Logs act as the first level of observability
+- Small scripts can simulate real SRE systems
+
+---
+
+## 💼 Real-World Relevance
+
+This project reflects how:
+
+- DevOps engineers implement lightweight health checks
+- SRE teams validate alerting systems
+- Production servers are monitored continuously
+
+This is the **foundation of tools like:**
+
+- Prometheus
+- Grafana
+- CloudWatch
+
+---
+
+## 🚀 Future Enhancements
+
+- Email alerts
+- Slack/Webhook integration
+- Timestamped logs
+- Docker container monitoring
+- Multiple server monitoring
+
+---
+
+## 🏁 Conclusion
+
+This project demonstrates:
+
+✔ Automation mindset  
+✔ Linux operational skills  
+✔ Monitoring & alerting fundamentals  
+✔ Production-style validation approach  
+
+---
+
+## 👨‍💻 Author
+
+**Manoj Kumar**  
+Aspiring DevOps Engineer | Linux | AWS | Automation
